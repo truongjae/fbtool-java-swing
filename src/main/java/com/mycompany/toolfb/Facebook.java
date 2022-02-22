@@ -23,6 +23,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class Facebook {
     private String access_token;
+    public Facebook(){
+        
+    }
     public Facebook(String access_token){
         this.access_token = access_token;
     }
@@ -44,7 +47,36 @@ public class Facebook {
             os.write(out);
             }
             temp+=".";
+        } 
+    }
+    
+    public void sendMess(String myId,String idUser, String content, String fb_dtsg,String cookie,int quantity) throws MalformedURLException, IOException{
+        
+        for (int i = 0; i < quantity; i++) {
+            URL url = new URL("https://mbasic.facebook.com/messages/send/?icm=1&refid=12");
+            HttpURLConnection http = (HttpURLConnection)url.openConnection();
+            http.setRequestProperty("Cookie", cookie);
+            http.setRequestMethod("POST");
+            http.setDoOutput(true);
+            http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            String tids = "cid.c."+myId+":"+idUser;
+            String ids = "ids["+idUser+"]";
+            String data = "fb_dtsg="+fb_dtsg+
+                "&body="+content+
+                "&tids="+tids+
+                "&"+ids+"="+idUser+
+                "&send=Gửi"+
+                "&wwwupp=C3"+
+                "&referrer="+
+                "&ctype="+
+                "&cver=legacy";
+           byte[] out = data.getBytes(StandardCharsets.UTF_8);
+           OutputStream stream = http.getOutputStream();
+           stream.write(out);
+           http.disconnect();
         }
         
     }
+    
+    
 }
